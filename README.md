@@ -1,132 +1,58 @@
-# Cloud Code Academy - Integration Developer Program
-## Lesson: Jira Integration with Salesforce (Part 1)
+# Salesforce DX Project
 
-This assignment focuses on implementing integration between Salesforce and Jira, creating a foundation for bidirectional synchronization using Salesforce custom objects and the Jira API.
+Salesforce DX is a development approach that brings source-driven development, team collaboration, and continuous integration to the Salesforce Platform. Instead of working directly in an org through a web browser, you work with metadata as source files in a local DX project, track changes in version control, and deploy through automated processes.
 
-## 🎯 Learning Objectives
+This project template gets you started with the tools and structure you need to build Salesforce applications using source control, scratch orgs, and the Salesforce CLI.
 
-By the end of this lesson, you will be able to:
+## Prerequisites
 
-- Implement outbound callouts from Salesforce to Jira using Queueable Apex
-- Create custom wrapper classes to handle Jira API payloads
-- Configure proper authentication for Jira API integration
-- Implement robust error handling for external system integration
-- Follow separation of concerns pattern in integration development
+Before you start, make sure you have:
 
-## 📋 Assignment Overview
+- **Salesforce CLI** - Download from [developer.salesforce.com/tools/salesforcecli](https://developer.salesforce.com/tools/salesforcecli). See [Install Salesforce CLI](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_install_cli.htm) for details.
+- **VS Code with Salesforce Extension Pack** - See [Installation Instructions](https://developer.salesforce.com/docs/platform/sfvscode-extensions/guide/install.html) for details. Includes the Agentforce Vibes extension.
+- **A development org** - Sign up for a free Developer Edition org [here](https://developer.salesforce.com/signup).
+- **Dev Hub enabled** (optional, required to create scratch orgs) - You can enable Dev Hub in your development org under Setup > Dev Hub.  See [Provide Developers Access to Salesforce DX Tools](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_setup_dx_tools.htm).
 
-In this assignment, you will be implementing the foundation for a Jira integration with Salesforce. The application will create Jira projects and issues from corresponding Salesforce custom objects, using asynchronous processing techniques.
+## Project Structure
 
-Your implementation must:
+Your DX project follows this structure:
 
-1. Make callouts to Jira when Jira Project and Jira Issue records are created in Salesforce
-2. Use Queueable Apex for asynchronous processing of callouts
-3. Create proper wrapper classes to handle Jira API payloads
-4. Update Salesforce records with the corresponding Jira IDs after successful creation
+- **`force-app/main/default/`** - Your metadata source files live in this default package directory. You can configure additional package directories in the `sfdx-project.json` file.
+- **`config/`** - Scratch org definitions and project settings
+- **`scripts/`** - Automation scripts for common tasks
+- **`sfdx-project.json`** - Project manifest that defines package directories, namespace, API version, and other project-level settings
 
-## 🔨 Prerequisites
+See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm).
 
-1. A Jira Cloud account (sign up at https://www.atlassian.com/software/jira/free)
-2. Jira API Key for authentication
-3. Properly configured Named Credential in your org (see Setup Instructions)
+## Get Started
 
-## ✍️ Assignment Tasks
+Ready to start developing? The [Get Started with Salesforce DX](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_get_started_dx.htm) guide walks you through your first project, from creating a scratch org to creating a simple Apex class or LWC to deploying your code to a sandbox.
 
-Your tasks for this assignment include:
+## Common Salesforce CLI Commands
 
-1. Implement `JiraAPIService` class for making callouts to Jira API
-2. Complete the `JiraWrapper` class methods for handling Jira payloads
-3. Complete the `JiraTriggerHelper` class to handle trigger operations
-4. Implement the `JiraCalloutQueueable` class to make asynchronous callouts
-5. Make sure the triggers correctly handle insert scenarios for both projects and issues
+Here are common CLI commands that you'll use the most:
 
-## 🔑 Jira API Key Setup
+- `sf org login web`: Authorize an org
+- `sf org open`: Open your org in a browser
+- `sf org create scratch`: Create a scratch org
+- `sf project deploy start`: Deploy metadata to your org
+- `sf project retrieve start`: Retrieve metadata from your org
+- `sf template generate <artifact>`: Scaffold new components, such as Apex classes and triggers, LWC components, Lightning apps, and more
+- `sf apex <command>`: Run Apex tests, run anonymous Apex blocks, and view logs
+- `sf data <command>`: Work with test data
+- `sf alias <command>`: Manage org aliases
+- `sf config <command>`: Configure CLI settings
 
-1. Log in to your Jira Cloud account
-2. Click on your profile icon in the top-right corner
-3. Select **Account Settings** from the dropdown menu
-4. Navigate to the **Security** tab
-5. Scroll down to the **API token** section
-6. Click on **Create and manage API tokens**
-7. Click **Create API token**
-8. Give your token a meaningful name (e.g., "Salesforce Integration")
-9. Copy and securely store the generated API token - you won't be able to see it again!
-10. Use this token along with your email address for Basic Authentication in the Named Credential
+## Use Agentforce Vibes to Build Lightning Apps
 
-## 🔍 Finding Your Jira Account ID
+Transform your ideas into custom Lightning apps that extend CRM workflows directly in Lightning Experience. Through natural conversations with Agentforce Vibes, implement custom objects and fields, complex business logic, and dynamic UI components. See [Build a Lightning App Using Agentforce Vibes](https://developer.salesforce.com/docs/platform/einstein-for-devs/guide/lexapp-overview.html).
 
-To obtain your Jira Account ID (needed for the Project Lead):
+## Additional Resources
 
-1. Log in to your Jira Cloud account
-2. Click on your profile icon in the sidebar
-3. Select **Profile** from the menu
-4. Look at the URL in your browser - your Account ID is the alphanumeric string after the last slash
-   Example: `https://your-domain.atlassian.net/people/5bb7ad0ccc53fd0760103780`
-   Account ID: `5bb7ad0ccc53fd0760103780`
-5. Update the `LEAD_ACCOUNT_ID` constant in the `JiraWrapper` class with your Account ID
+- [Agentforce Vibes Developer Guide](https://developer.salesforce.com/docs/platform/einstein-for-devs/guide/einstein-overview.html)
+- [Salesforce CLI Installation Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
+- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/)
+- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/)
+- [Salesforce CLI Plugin Development Guide](https://developer.salesforce.com/docs/platform/salesforce-cli-plugin/guide/conceptual-overview.html)
+- [Salesforce VS Code Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
 
-## 🧪 Testing Your Implementation
-
-Your implementation should:
-
-- Successfully create Projects in Jira when Jira_Project\_\_c records are created in Salesforce
-- Successfully create Issues in Jira when Jira_Issue\_\_c records are created in Salesforce
-- Update the Salesforce records with the corresponding Jira IDs/keys
-- Handle errors gracefully with proper error messaging
-
-## 🎯 Success Criteria
-
-Your implementation should:
-
-- Make successful callouts to the Jira API
-- Create Projects and Issues in Jira
-- Update Salesforce records with Jira IDs/keys
-- Follow Salesforce best practices for integration
-- Include comprehensive error handling
-
-## 💡 Tips
-
-- Review the [Jira API documentation](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/)
-- Use the Developer Console debug logs to troubleshoot
-- Test with mock responses before making actual API calls
-- Pay attention to the JSON payload structure required by Jira
-
-## 📚 Resources
-
-- [Apex Developer Guide: Queueable Apex](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_queueable.htm)
-- [Apex Developer Guide: Callouts from Triggers](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_triggers_bestpract.htm)
-- [JSON Serialization in Apex](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_methods_system_json_overview.htm)
-- [Named Credentials in Salesforce](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_callouts_named_credentials.htm)
-- [Jira API Documentation](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/)
-
-## 🏆 Extra Credit - Optional Challenge
-
-Once you've completed the basic implementation, try these challenges:
-
-1. Add support for updating existing Jira Projects and Issues
-2. Implement error retry mechanism for failed callouts
-3. Create a Lightning component to display Jira Projects and Issues
-4. Add support for custom fields in Jira Issues
-
-## ❓ Support
-
-If you need help:
-
-- Review the Jira API documentation
-- Check the provided code structure for guidance
-- Reach out to your instructor
-
----
-
-Happy coding! 🚀
-
-_This is part of the Cloud Code Academy Integration Developer certification program._
-
-## Copyright
-
-© 2025 Cloud Code. All rights reserved.
-
-This software is provided under the Cloud Code Developer Kickstart Program License (CCDKPL) Version 1.0.
-The software is licensed, not sold, and is intended for personal educational purposes only as part of the Cloud Code Developer Kickstart Program.
-
-See the full license terms in LICENSE.md for more details regarding usage restrictions, ownership, warranties, and limitations of liability.
