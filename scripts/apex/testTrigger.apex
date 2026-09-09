@@ -1,0 +1,1 @@
+Case newCase = new Case(Subject = 'Task 4 Queueable Test Case', Priority = 'High', Description = 'Testing asynchronous Jira issue creation from Case Trigger.'); insert newCase; System.debug('Inserted Case ID: ' + newCase.Id);

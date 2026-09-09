@@ -1,0 +1,1 @@
+Case c = new Case(Subject = 'Task 5 Robust Error Test', Priority = 'High', Description = 'Testing detailed response wrapper and exception handling.'); insert c; System.debug('Inserted Case ID for Task 5: ' + c.Id);

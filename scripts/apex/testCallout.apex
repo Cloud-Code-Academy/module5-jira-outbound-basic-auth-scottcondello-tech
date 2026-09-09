@@ -1,0 +1,2 @@
+String createdKey = JiraCalloutService.createJiraIssue('SCRUM', 'Module 5 Task 3 Apex Callout Verification', 'Created via JiraCalloutService from Salesforce CLI.', 'Task');
+System.debug('SUCCESS: Created Jira Issue ' + createdKey);
