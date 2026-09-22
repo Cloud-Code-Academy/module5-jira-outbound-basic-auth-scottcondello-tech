@@ -1,104 +1,144 @@
 /**
- * Wrapper classes for Jira entities (Project and Issue)
- */
+Wrapper classes and JSON parsers for Jira REST API requests and responses.
+*/
 public class JiraWrapper {
-	private static final String LEAD_ACCOUNT_ID = '1337:0123456789-bfa0-40f4-bd28-25ae65c3e5b1';
-	private static final String PROJECT_TEMPLATE_KEY = 'com.pyxis.greenhopper.jira:basic-software-development-template';
-
-	/**
-	 * Wrapper for Jira Project
-	 */
-	public class ProjectWrapper {
-		public String name;
-		public String key;
-		public String description;
-		public String leadAccountId;
-		public String projectTemplateKey;
-
-		/**
-		 * Constructor for ProjectWrapper
-		 */
-		public ProjectWrapper(String name, String key, String description) {
-			this.name = name;
-			this.key = key;
-			this.description = description;
-			this.leadAccountId = LEAD_ACCOUNT_ID;
-			this.projectTemplateKey = PROJECT_TEMPLATE_KEY;
-		}
-	}
-
-	/**
-	 * Wrapper for Jira Issue
-	 */
-	public class IssueWrapper {
-		public String name;
-		public String key;
-		public String description;
-		public String projectKey;
-		public String summary;
-		public String issueType;
-
-		/**
-		 * Constructor for IssueWrapper
-		 */
-		public IssueWrapper(
-			String projectKey,
-			String summary,
-			String description,
-			String issueType
-		) {
-			this.projectKey = projectKey;
-			this.summary = summary;
-			this.description = description;
-			this.issueType = (String.isNotBlank(issueType)) ? issueType : 'Task';
-		}
-
-		/**
-		 * Convert IssueWrapper to a Map for serialization
-		 *
-		 * TODO: Implement this method to create a Map that represents
-		 * the JSON payload needed for the Jira API. The Map should contain:
-		 * - fields object with project information (key)
-		 * - issuetype object with the issue type name
-		 * - summary field
-		 * - description field (formatted using formatDescription method)
-		 * - Example:
-		 */
-		public Map<String, Object> generateIssuePayloadMap() {
-			// Your implementation goes here
-			return null;
-		}
-
-		/**
-		 * Format description as per Jira Cloud API requirements
-		 *
-		 * TODO: Implement this method to format the description text
-		 * according to Jira Cloud API requirements.
-		 * - Create a Map with type="doc" and version=1
-		 * - Add content array with paragraph object
-		 * - Add text object inside paragraph content with the description
-		 * - Example:
-		 *   {
-		 *     "description": {
-		 *       "type": "doc",
-		 *       "version": 1,
-		 *       "content": [
-		 *         {
-		 *           "type": "paragraph",
-		 *           "content": [
-		 *             {
-		 *               "type": "text",
-		 *               "text": "Order entry fails when selecting supplier."
-		 *             }
-		 *           ]
-		 *         }
-		 *       ]
-		 *     }
-		 *   }
-		 */
-		private Map<String, Object> formatDescription(String descText) {
-			// Your implementation goes here
-			return null;
-		}
-	}
+// --- Request Wrappers ---
+public class ProjectWrapper {
+public String key;
+public String name;
+public String description;
+public String projectTypeKey;
+public String projectTemplateKey;
+public ProjectWrapper(
+String name,
+String key,
+String description
+) {
+this.name = name;
+this.key = key;
+this.description = description;
+this.projectTypeKey = 'software';
+this.projectTemplateKey =
+'com.pyaxis.jira.plugins.jira-servicedesk-custom-fields:next-gen-software';
+}
+}
+public class IssueWrapper {
+public Fields fields;
+/*
+Keep this order aligned with JiraCalloutQueueable:
+summary, description, projectKey, issueType.
+*/
+public IssueWrapper(
+String summary,
+String description,
+String projectKey,
+String issueType
+) {
+this.fields = new Fields(
+summary,
+description,
+projectKey,
+issueType
+);
+}
+/*
+Retain this method if JiraAPIService expects a Map<String, Object>.
+JSON.serialize(this) already creates the required JSON structure.
+*/
+public Map<String, Object> generateIssuePayloadMap() {
+return (Map<String, Object>) JSON.deserializeUntyped(
+JSON.serialize(this)
+);
+}
+}
+public class Fields {
+public String summary;
+public AdfDocument description;
+public ProjectRef project;
+public IssueTypeRef issuetype;
+public Fields(
+String summary,
+String descriptionText,
+String projectKey,
+String issueType
+) {
+this.summary = summary;
+this.description = new AdfDocument(descriptionText);
+this.project = new ProjectRef(projectKey);
+this.issuetype = new IssueTypeRef(issueType);
+}
+}
+public class ProjectRef {
+public String key;
+public ProjectRef(String key) {
+this.key = key;
+}
+}
+public class IssueTypeRef {
+public String name;
+public IssueTypeRef(String name) {
+this.name = name;
+}
+}
+// --- Atlassian Document Format Wrappers ---
+public class AdfDocument {
+public String type = 'doc';
+public Integer version = 1;
+public List<AdfParagraph> content;
+public AdfDocument(String descriptionText) {
+content = new List<AdfParagraph>{
+new AdfParagraph(descriptionText)
+};
+}
+}
+public class AdfParagraph {
+public String type = 'paragraph';
+public List<AdfTextNode> content;
+public AdfParagraph(String text) {
+content = new List<AdfTextNode>{
+new AdfTextNode(
+String.isBlank(text)
+? 'No description provided.'
+: text
+)
+};
+}
+}
+public class AdfTextNode {
+public String type = 'text';
+public String text;
+public AdfTextNode(String text) {
+this.text = text;
+}
+}
+// --- Response Wrappers ---
+public class ProjectResponse {
+public String id;
+public String key;
+public String self;
+}
+public class IssueResponse {
+public String id;
+public String key;
+public String self;
+}
+// --- Static Parsers ---
+public static ProjectResponse parseProjectResponse(String jsonBody) {
+if (String.isBlank(jsonBody)) {
+return null;
+}
+return (ProjectResponse) JSON.deserialize(
+jsonBody,
+ProjectResponse.class
+);
+}
+public static IssueResponse parseIssueResponse(String jsonBody) {
+if (String.isBlank(jsonBody)) {
+return null;
+}
+return (IssueResponse) JSON.deserialize(
+jsonBody,
+IssueResponse.class
+);
+}
 }
