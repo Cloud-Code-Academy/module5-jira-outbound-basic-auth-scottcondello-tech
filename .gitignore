@@ -24,6 +24,9 @@ yarn-error.log*
 # Dependency directories
 node_modules/
 
+# ApexPMD cache
+.pmdCache
+
 # Eslint cache
 .eslintcache
 
@@ -43,12 +46,3 @@ $RECYCLE.BIN/
 **/__pycache__/
 **/.venv/
 **/venv/
-
-# Cloud Code
-.husky/
-/.cursor
-/force-app/main/solutions
-/authFile.json
-.idea/
-.history/
-IlluminatedCloud/

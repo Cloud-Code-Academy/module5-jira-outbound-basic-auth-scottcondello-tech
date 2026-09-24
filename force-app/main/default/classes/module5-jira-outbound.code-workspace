@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../../../.."
+		},
+		{
+			"path": "../../../../../../ClaudeCodeTenexWorkshop"
+		}
+	],
+	"settings": {
+		"xml.preferences.showSchemaDocumentationType": "none"
+	}
+}

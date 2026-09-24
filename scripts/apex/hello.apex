@@ -1,18 +1,10 @@
-String randomNumber = String.valueOf(Integer.valueOf(Math.random() * 100)); //generate random number between 0 and 99
-// JiraWrapper.ProjectWrapper projectWrapper = new JiraWrapper.ProjectWrapper(
-// 	'Test Project ' + randomNumber,
-// 	'T' + randomNumber,
-// 	'Test Description ' + randomNumber
-// );
-// JiraAPIService.createProject(projectWrapper);
+// Use .apex files to store anonymous Apex.
+// You can execute anonymous Apex in VS Code by selecting the
+//     apex text and running the command:
+//     SFDX: Execute Anonymous Apex with Currently Selected Text
+// You can also execute the entire file by running the command:
+//     SFDX: Execute Anonymous Apex with Editor Contents
 
-//create issue
-randomNumber = '60';
-JiraWrapper.IssueWrapper issueWrapper = new JiraWrapper.IssueWrapper(
-	'T' + randomNumber,
-	'Test Issue ' + randomNumber,
-	'Test Description ' + randomNumber,
-	'Task'
-);
-System.debug(JSON.serialize(issueWrapper));
-JiraAPIService.createIssue(issueWrapper);
+string tempvar = 'Enter_your_name_here';
+System.debug('Hello World!');
+System.debug('My name is ' + tempvar);
